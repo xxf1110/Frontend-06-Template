@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe</title>
+    <style>
+        .wrap {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            margin-left: -150px;
+            margin-top: -150px;
+        }
+
+        .cell {
+            width: 96px;
+            height: 96px;
+            line-height: 96px;
+            font-size: 50px;
+            text-align: center;
+            background-color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap"></div>
+    <script>
+        let partner = [
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+        ]
+        let color = 2
+        draw(partner)
+        // console.log(bestChoice(partner, color))
+
+        function draw(partner) {
+            let wrap = document.getElementsByClassName('wrap')[0]
+            wrap.innerHTML = ''
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    let cell = document.createElement('div')
+                    cell.classList.add('cell')
+                    let cur = partner[i * 3 + j]
+                    cell.innerHTML = cur === 2 ? '❌' : (cur === 1 ? '⭕️' : '')
+                    cell.addEventListener('click', () => userMove(i, j))
+                    wrap.appendChild(cell)
+                }
+            }
+        }
+
+        function userMove(i, j){
+            if (partner[i * 3 + j]) return;
+            partner[i * 3 + j] = color
+            if (check(partner, color)) {
+                alert(color === 2 ? '❌---- win' : '⭕️ ---- win')
+            }
+            color = 3 - color
+            draw(partner)
+            // if (willWin(partner, color)) {
+            //     alert(color === 2 ? '❌---- will win' : '⭕️ ---- will win')
+            // }
+            let res = bestChoice(partner, color)
+            console.log(res)
+            computerMove(partner, color)
+        }
+
+        function computerMove(i, j) {
+            let {point, result} = bestChoice(partner, color)  
+            if(!point) return;
+            partner[point[0] * 3 + point[1]] = color
+            if (check(partner, color)) {
+                alert(color === 2 ? '❌---- win' : '⭕️ ---- win')
+            }
+            color = 3 - color
+            draw(partner) 
+        }
+        function clone(partner) {
+            // return JSON.parse(JSON.stringify(partner))
+            return [...partner] // 此处是数字可以直接复制
+        }
+
+        function bestChoice(partner, color) {
+            let p;
+            if (p = willWin(partner, color)) {
+                return {
+                    point: p,
+                    result: 1,
+                }
+            }
+            let result = -2
+            let point = null
+            outer: for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (partner[i * 3 + j]) continue
+                    let cloneP = clone(partner)
+                    cloneP[i * 3 + j] = color
+                    let r = bestChoice(cloneP, 3 - color).result
+                    if (-r > result) {
+                        point = [i, j]
+                        result = -r
+                    }
+                    if (result === 1) break outer;
+                }
+            }
+            return {
+                point,
+                result: point ? result : 0
+            }
+        }
+
+        function check(partner, color) {
+            for (let i = 0; i < 3; i++) {
+                let isWin = true
+                for (let j = 0; j < 3; j++) {
+                    if (partner[i * 3 + j] !== color) {
+                        isWin = false
+                    }
+                }
+                if (isWin) return isWin
+            }
+            for (let i = 0; i < 3; i++) {
+                let isWin = true
+                for (let j = 0; j < 3; j++) {
+                    if (partner[j * 3 + i] !== color) {
+                        isWin = false
+                    }
+                }
+                if (isWin) return isWin
+            }
+            {
+                let isWin = true
+                for (let i = 0; i < 3; i++) {
+                    if (partner[i * 3 + 2 - i] !== color) {
+                        isWin = false
+                    }
+                }
+                if (isWin) return isWin
+            }
+            {
+                let isWin = true
+                for (let i = 0; i < 3; i++) {
+                    if (partner[i * 3 + i] !== color) {
+                        isWin = false
+                    }
+                }
+                if (isWin) return isWin
+            }
+            return false;
+        }
+        function willWin(partner, color) {
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (partner[i * 3 + j]) continue
+                    let p = clone(partner)
+                    p[i * 3 + j] = color
+                    if (check(p, color)) return [i, j]
+                }
+            }
+            return null
+        }
+    </script>
+</body>
+
+</html>
