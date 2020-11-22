@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wildcard</title>
+</head>
+<body>
+    <script>
+        function find(source, pattarn){
+            let startCount = 0
+            for (let i = 0; i < pattarn.length; i++) {
+                if(pattarn[i] === '*') startCount++;
+            }
+            // 没有* 判断是否匹配
+            if(startCount === 0){
+                for (let i = 0; i < pattarn.length; i++) {
+                    if(pattarn[i] !== source[i] && pattarn[i] !== '?') return false
+                }
+                return true;
+            }
+            let i = 0
+            let lastIndex = 0
+            // 找第一个*位置
+            for (i = 0; pattarn[i] !== '*'; i++) {
+                if(pattarn[i] !== source[i] && pattarn[i] !== '?') return false
+            }
+            // 从第一个*的位置匹配
+            lastIndex = i
+            // 匹配除了最后一个*之外的 如果只有一个*进入尾部的匹配
+            for (let p = 0; p < startCount - 1; p++) {
+                i++;
+                let subPattarn = ''
+                while(pattarn[i] !== '*'){
+                    subPattarn += pattarn[i]
+                    i++
+                }
+                let reg = new RegExp(subPattarn.replace(/\?/g, '[\\s\\S]'), 'g')
+                reg.lastIndex = lastIndex
+                // console.log(reg.exec(source));
+                if(!reg.exec(source)) return false
+                lastIndex = reg.lastIndex
+            }
+            // 尾部匹配
+            for (let j = 0; j <= source.length - lastIndex && pattarn[pattarn.length - j] !== '*'; j++) {
+                if(pattarn[pattarn.length - j] !== source[source.length - j] && pattarn[pattarn.length - j] !== '?'){
+                    return false
+                }
+            }
+            return true
+        }
+        console.log( find('abcabcabxaac', 'a*b*bx*c'))
+        console.log( find('abcabcabxaac', 'a*b?*b?x*c')) 
+    </script>
+</body>
+</html>

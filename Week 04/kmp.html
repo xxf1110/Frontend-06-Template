@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMP</title>
+</head>
+
+<body>
+    <script>
+        function kmp(source, pattarn) {
+            let table = new Array(pattarn.length).fill(0)
+            {
+                let i = 1, j = 0; 
+                while (i < pattarn.length) {
+                    if (pattarn[i] === pattarn[j]) {
+                        i++, j++;
+                        table[i] = j
+                    } else {
+                        if (j > 0) {
+                            j = table[j]
+                        } else {
+                            i++
+                        }
+                    }
+                }
+                console.log(table);
+            }
+            {
+                let i = 0, j = 0;
+                while (i < source.length) {
+                    if (pattarn[j] === source[i]) {
+                        j++, i++;
+                    } else {
+                        if (j > 0) {
+                            j = table[j]
+                        } else {
+                            i++
+                        }
+                    }
+                    if (j === pattarn.length) return {start: i - pattarn.length, end: i };
+                }
+                return null;
+            }
+        }
+        // a b c d a b c e
+
+        //   a b c d a b c e
+        //     a b c d a b c e
+        //       a b c d a b c e
+        //         a b c d a b c e 
+
+        // 0 0 0 0 0 1 2 3
+        console.log( kmp('aabaacaad', 'aac')) 
+
+ 
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字典树</title>
+</head>
+
+<body>
+    <script>
+        let $ = Symbol('$')
+        class Trie {
+            constructor() {
+                this.root = Object.create(null)
+            }
+            insert(word) {
+                let node = this.root
+                for (const s of word) {
+                    if (!node[s]) {
+                        node[s] = Object.create(null)
+                    }
+                    node = node[s]
+                }
+                if (!($ in node)) {
+                    node[$] = 0
+                }
+                node[$]++
+            }
+            most() {
+                let max = 0
+                let maxWord = null
+                const visit = (node, word) => {
+                    if (node[$] && node[$] > max) {
+                        max = node[$]
+                        maxWord = word
+                    }
+                    for (let p in node) {
+                        visit(node[p], word + p)
+                    }
+                }
+                // 伪递归
+                visit(this.root, '')
+                return { maxWord, max }
+            }
+             
+        }
+        const randomWord = (length) => {
+            const { random } = Math
+            let s = ''
+            for (let i = 0; i < length; i++) {
+                s += String.fromCharCode('a'.charCodeAt(0) + random() * 26)
+            }
+            return s;
+        }
+        let trie = new Trie()
+        for (let i = 0; i < 100000; i++) {
+            trie.insert(randomWord(4))
+        }
+        
+        console.log(trie.most())
+        console.log(trie);
+
+    </script>
+
+</body>
+
+</html>
