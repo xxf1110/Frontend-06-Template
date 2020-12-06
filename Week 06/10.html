@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 行为改变状态
+        class People {
+            hurtBY = null
+            hurt(who, action) {
+                this.hurtBy = who
+                console.log('被' + who + action + '了');
+            }
+        }
+        new People().hurt('狗', '咬')
+
+    </script>
+</body>
+
+</html>
