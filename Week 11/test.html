@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        .cls {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="cls" id="box"></div>
+    </div>
+    <script>
+
+        function match(selector, element) {
+            const parts = selector.split(" ").reverse();
+            // 是否部分匹配
+            const isPartMatch = (part, element) => {
+                let mark = false
+                let m = part.match(/([^\#\.]+)/);
+                if (m) {
+                    mark = m[1].toLowerCase() === element.tagName.toLowerCase()
+                    if (!mark) return false;
+                }
+                m = part.match(/#([^\.]+)/);
+                if (m) {
+                    let id = element.getAttribute('id').toLowerCase()
+                    mark = m[1].toLowerCase() === id
+                    if (!mark) return false;
+                }
+                m = part.match(/\.([^\#]+)/);
+                if (m) {
+                    let className = element.getAttribute('class').toLowerCase()
+                    mark = m[1].toLowerCase() === className
+                    if (!mark) return false;
+                }
+                return mark
+            };
+            let isMatch = isPartMatch(parts.shift(), element)
+            if (!isMatch) return false;
+            let current = element
+            for (const part of parts) {
+                let isParentMatch = false
+                while (current.parentElement) {
+                    current = current.parentElement
+                    if (isPartMatch(part, current)) {
+                        isParentMatch = true
+                        break;
+                    }
+                }
+                if (!isParentMatch) return false;
+            }
+            return true;
+        }
+        console.log(match("div div div.cls#box", document.getElementById("box")));
+        console.log(match("body div div#box.cls", document.getElementById("box")));
+
+
+        // 为什么 first-letter 可以设置 float 之类的，而 first-line 不行呢？
+        /*
+            first-line 是作用与块级元素的第一个格式化行，而且必须是同一流的块级后代中，float 会脱离文档流, 破坏首行
+            first-letter 将应用于包含该内容的元素的第一个字母
+        */ 
+        
+    </script>
+</body>
+
+</html>
