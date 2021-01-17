@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const styles = window.getComputedStyle(document.body);
+        const attrs = []
+        for (const attr of styles) {
+            if(attr.match(/^(-webkit-)/)) continue;
+            attrs.push(attr)
+        }
+        console.log(attrs);
+        const fragment = document.createDocumentFragment()
+        for (const attr of attrs) {
+            const li = document.createElement('li')
+            li.innerText = attr
+            fragment.appendChild(li)
+        }
+        document.body.appendChild(fragment)
+    </script>
+</body>
+</html>

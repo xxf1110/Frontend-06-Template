@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .clearFix::after{
+            display: block;
+            content: '';
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="clearFix">
+        <div style='float: left;width: 100px; height: 100px; background-color: red;'>1</div>
+        <div style='float: left;width: 100px; height: 100px; background-color: red;'>2</div>
+        <div style='float: left;width: 100px; height: 100px; background-color: red;'>3</div>
+        <div style='clear: left;float: left;width: 100px; height: 100px; background-color: red;'>4</div>
+    </div>
+    <div>trst</div>
+</body>
+</html>
