@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" oncontextmenu="event.preventDefault()"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box{
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+    <script type="module">
+        import { enableGesture } from "./gesture.js";
+        enableGesture(document.documentElement)
+
+        document.documentElement.addEventListener('tap', (e) => {
+            console.log('tap trigger', e);
+        })
+        document.documentElement.addEventListener('panstart', (e) => {
+            console.log('panstart trigger', e);
+        })
+        document.documentElement.addEventListener('pan', (e) => {
+            console.log('pan trigger', e);
+        })
+        document.documentElement.addEventListener('panend', (e) => {
+            console.log('panend trigger', e);
+        })
+        document.documentElement.addEventListener('press', (e) => {
+            console.log('press trigger', e);
+        })
+        document.documentElement.addEventListener('pressend', (e) => {
+            console.log('pressend trigger', e);
+        })
+        document.documentElement.addEventListener('flick', (e) => {
+            console.log('flick trigger', e);
+        })
+    </script>
+            
+</body>
+</html>
