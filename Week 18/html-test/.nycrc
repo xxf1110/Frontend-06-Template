@@ -1,0 +1,3 @@
+{
+    "extends": "@istanbuljs/load-nyc-config"
+}
